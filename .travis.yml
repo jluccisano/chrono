@@ -12,9 +12,6 @@ before_install:
 install:
 - npm install
 - npm run build
-before_script:
-#binfmt-support
-- sudo apt-get --yes --no-install-recommends install binfmt-support qemu-user-static
 script:
 - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
 - docker build -t $REPO:$TAG .
