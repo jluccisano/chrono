@@ -13,7 +13,8 @@ install:
 - npm install
 - npm run build
 script:
-- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH;
+  fi`
 - docker build -t $REPO:$TAG .
 after_success:
 - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
@@ -28,10 +29,10 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    repo: $REPO
+    repo: "$REPO"
 env:
   global:
-  - secure: TecGmyKwUSpfLG/7vlXQ/3CHsTVtPyKNJy90HCDv61dZxga7TAFLLQ03MWfrr5rrEUxc50P4pPt0mpNgYk7pbpjGYmWNO6fbcj/jhHkC81YTe5WKItwAkIH761M+bDBSh4B6n3wN27gl8S8zcw8Kz7ZYkAxigfCI69jKMvmhOe2hx4T1/wqx7zmNyDofjgg6Gm9jahFNjUYIyHwy4YvbsSAzNLTdYPlCs4Cs1MxIXmwYptJ3hHxH+ysTJ5wXjJ5/qaYJ411JF8CyyuU2BhSTguPuaFj3cFetfIGCqGCRVPI/QqPAfC2UNDaSIAy4IhWswxgaEC4+GmxPx0+pOiFbYnkLsyqQ7/tFRturqWKtXnPigJ9E0FTLyVi5H9dAg4EW9nJWsV6s0wBvYImk8GKw/u2PKVDYHEDejCXBd/PH6Jq5CLnbILbwYfPuAPbddBEV6dPRt988YgLiTxgnz9EylE9qoS5MuPdkBoj3NAG2jccfAi2tS1IumetgaQc30qm/DVJs9OjRjPVZvNGPRAjoDSbWbmJEKanlRa5h/rzNHgg7R+6tR2iRru48gGXkt/5GgNMgfRIih6NP8spWJnvYASCeBIVeCaoEgZIK4oNsZyi/lPlgiGbNuU5xv3IrgQ6XqlA2qNwJLQh5tT8YTLi4OEpJGVojpxNjuELbTtadG1E=
-  - secure: jjjr7o8fPok8AQ9g0ii4ts4isc/QftyO+Sbu/Y/pxb/bnPLZckJav2k4/5oXA4d0iQi52gwvNzWQ0u5s+tC/nX06iumfqnZpCUgrt/rFoBgrV40OhRx5J/3UBXUgBwPU1Kjd/3F6LsNvnF7HdbtrEfxwDTRGBo1pbMoK9O269cuug+pLyR9DzgmvuZESWfxD8i1C9WVdXAYbflCUJ8r59M1y0PAEbq2s4Wb2d3xSq6qtlx83WNYhjUDModtm2crv7VQQCERR/hNULvMou1MI/9mqJg9iU1b8ZA8RqdatPEmavWYp8cYbTvcyoTRevTVZoO1fbERa29iWr/7AHgQbRLd8hA8wQSDf1/NPaTmE91ymwMlktCBrSgEnOVKNhL7lWxTLVXyjrL/HNTt5EKvZ0T3xMdbZNhq3PoNnPd/RmaEdxyG24ruHjxs+JRMqQbKUWmEAHNPsGc7WuTcPJAxjiucaO8G4EnpAsox4f0Q0ib//bAsFjxVkFETmla+N6TAwtkh2PeOacdYDahxe8v7gPAJFJjB7qgwfDcs1IwOhQVqQOSTT7pxmGwRmBvKu36pTcThU0Mm39oMfJrrPLb0+KJ+Y3UKfcOqsc7A7dLIjMaNz//RVtpeVBLBzkRDQ9z+zwhW0PnCD7B1uh0FyTvvmVDITWmS7K6aJgTOidaie6MI=
   - COMMIT=${TRAVIS_COMMIT::8}
   - REPO=$DOCKER_USER/chrono
+  - secure: re85i5JIgod5mNJiBbPPH7Olgp2xdcO8frWqmRmrwTyQ++Mbmq+ENwnwZY7zsgTtOZQlX0i6L/pSW14vhd9Qn4ds/59cm5FR/3sB0SDXx6GOtfm6DHxzpASMbnZcadpweDOeT4yDRBEoDtxotfpWcCEgwm+VzkX9VRDhW92yCkegj87f6ILOdpG1XqBQSgvSxYTSWOcYLy6eOyGdo8HQl1/weiwnUM/APJ+IzoDuqST0ESbhh8QQ3PVVKHD/TjvpN7aWdpb7MuRDQOkOR5h/BsP+NHuGe28d1nEw4tv7ATW+aJPxr3vDoRs9GRMrAgPVRVy4kmxQOit1GwUsKdyjKUWB2ZIc3+cUHeM/YotIq5Fe/axA3xr3yfhIvBBrk8x7QP7TE3m8ee04wel/SHq4+PM2sshxGsu32PnJrwaKn9RK1hTsu5FHwg3UyJZVSKvJBnBj8NgKPu1QOExAn/Ou0o1iNNipDVpOAVWjBz5LPh+6MB7ULEHoyViZEiuui+NBBXFjPPF5vk+59a6snSQOthzLIMX1kuZTqI1MsEGBcJqvyl4pcz9ZF5P01GPfw+8fV61Q1Mm5ec6gdbMcTqShKiXmsnXClvR13Pyf92Hvt3WEMvpszq7362LKHamXTPenCXy1v176z/CgoWkBXw+pUinIqtbE6Y0b8CRZFGfABjQ=
+  - secure: jxpQzlCLfbjPEKWO6oIu3tZ72cUtSccZuVA5fIATRBlyT0V23V0QrRw4AnETgcqei/nree++uOxy77h7qudIdZnp/GO6wB94rvhxDHPYZgoEa2j3yXRxayndVc0s5XHFaEFkYxoW5A0r/cyr9rk6zuqqrTMj5NtfEy/9bbXP/1Oo81AlnsNuvWSwt7EliOzX+Uvmg9YYslk8XgXE1mrKFdyLCdmRxgXkh93oyg2XyOCatF8/ihQiRr3+Na9Y5KCWONRLmjJxvEdj7A5dwePqX0y7RMzFnDkbj1YLmiUk7UpgAsfKu7sKt08ji9IecN6RMXR1NMLzEGGTbe+VDHmC1PYKrxRNXN5ARwv+jN/KZZgMI78EU2QzsmTT0M4CIlL923qkLX9ahQ7YgGYORyApmpbxswce+VLagTjmm4wYaIYx9r4/e5CO6d9fp2cgsWyC2ZpIZmkNqkyfqQVr9cCoYjspU9NuHydyGi4jAX0ToIQkEHyHHyNVp3dDWFX2svV7DGArVx852wmRw1hssUdNyKA5yO6tOuOPjImS9mwOu//GVid7CsFSsoaxXLJXkUo+qvCIjR9tO9xTGwVOmIQZ8jc1VXPET4/KlmauT158AGTJjyHnr8MZvwkm7xNZxWuN9HOvRQaxaFsRxQD5YoGgtYJW8m1cDif5S+tk+7KzEG8=
