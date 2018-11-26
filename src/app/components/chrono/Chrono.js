@@ -1,94 +1,222 @@
+/* eslint-disable no-debugger */
+
 import React from 'react';
 import {connect} from 'react-redux';
 import './_Chrono.scss';
+import {addAthleteLap, startTimer, stopTimer, resetTimer, tick, showNotification, tickStep, nextStep, startInterval, pauseInterval} from '../../actions/athleteActions';
+import PropTypes from 'prop-types';
+import uuidv4 from  'uuid/v4';
+import Chip from 'material-ui/Chip';
+import Avatar from 'material-ui/Avatar';
+import {GridList, GridTile} from 'material-ui/GridList';
+import Play from 'material-ui/svg-icons/av/play-arrow';
+import Pause from 'material-ui/svg-icons/av/pause';
+import Reset from 'material-ui/svg-icons/av/replay';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ElapsedTime from './ElapsedTime';
+
+const styles = {
+  chip: {
+    margin: 4
+  },
+  button:{
+    marginRight: 5,
+  }
+};
 
 class Chrono extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-        startTS: null,
-        diff: null,
-        suspended: 0,
-        interval: null
-    };
   }
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeyDown);
-  }
+  componentWillUnmount() {
+		if (this._interval) cancelAnimationFrame(this._interval);
+	}
 
-  onKeyDown(evt){
-    evt.preventDefault();
-    // start|stop on [space]
-    evt.keyCode === 32 && this[!this.state.startTS ? 'start' : 'stop']();
-    // reset on [escape]
-    evt.keyCode === 27 && this.reset();
-  }
+	nextInterval() {
+    var currentTime = Date.now();
+    //this._interval = requestAnimationFrame(this.progressStep);
+
+    var nextIndex = this.props.athlete.program.stepIndex + 1;
+
+    if(this.props.programSteps.length > 0) {
+
+        if(nextIndex <= this.props.programSteps.length) {
+          var nextStep =  this.props.programSteps[nextIndex-1];
+          if(nextStep.type == 2) {
+             var expireAt = nextStep.duration * 1000; //sec to milliseconds
+             this._interval = requestAnimationFrame(this.progressInterval);
+             this.props.startInterval(this.props.athlete.id, expireAt, currentTime, nextIndex, true);
+          } else {
+             this._interval = requestAnimationFrame(this.progressInterval);
+             this.props.startInterval(this.props.athlete.id, 0, currentTime, nextIndex, false);
+          }
+
+        } else {
+             //Training finish
+             //lap
+             //stop
+             this.props.stopTimer(this.props.athlete.id);
+             //notification
+             this.pause();
+             this.props.showNotification('Finished ' + this.props.athlete.firstName  + ' !!!', 3000);
+        }
+
+    } else {
+            this._interval = requestAnimationFrame(this.progressInterval);
+            this.props.startInterval(this.props.athlete.id,0, currentTime, nextIndex);
+    }
+	}
+
+	progressInterval = () => {
+      // check if a rest step so stop and lap
+      if(this.props.athlete.program.time <= 0 && this.props.athlete.program.countdown) {
+          this.props.showNotification('Go ' + this.props.athlete.firstName  + ' !!!', 3000);
+          cancelAnimationFrame(this._interval);
+          this.nextInterval();
+      } else {
+          this.props.tickStep(this.props.athlete.id,  Date.now());
+          this._interval = requestAnimationFrame(this.progressInterval);
+      }
+	}
 
   start() {
-    if (this.state.startTS) {
-      // prevent multi clicks on start
-      return;
-    }
-    this.setState({
-      startTS: +new Date() - this.state.suspended,
-      interval: requestAnimationFrame(() => {this.tick();}),
-      suspended: 0
-    });
+     var currentTime =  Date.now();
+     if(!this.props.athlete.timer.isOn) {
+        this.props.startTimer(this.props.athlete.id, currentTime);
+        this.nextInterval();
+     } else {
+        this.resume(currentTime);
+     }
   }
 
-  stop() {
-    cancelAnimationFrame(this.state.interval);
-    this.setState({
-      startTS: null,
-      suspended: +this.state.diff
-    });
+  resume(currentTime) {
+      this._interval = requestAnimationFrame(this.progressInterval);
+      this.props.startInterval(this.props.athlete.id, this.props.athlete.program.time, currentTime, this.props.athlete.program.stepIndex);
+  }
+
+	pause() {
+    cancelAnimationFrame(this._interval);
+    this.props.pauseInterval(this.props.athlete.id);
+  }
+
+
+	lap() {
+     this.props.addAthleteLap(this.props.athlete.id);
+     this.nextInterval();
   }
 
   reset() {
-    cancelAnimationFrame(this.state.interval);
-    this.setState({
-                    startTS: null,
-                    diff: null,
-                    suspended: 0,
-                    interval: null
-                  });
+    cancelAnimationFrame(this._interval);
+    this.props.resetTimer(this.props.athlete.id);
   }
 
-  tick() {
-    this.setState({
-      diff: new Date(+new Date() - this.state.startTS),
-      interval: requestAnimationFrame(() => {this.tick();})
-    });
+  stop() {
+      cancelAnimationFrame(this._interval);
   }
 
-  addZero(n) {
-    return n < 10 ? '0' + n : n;
+
+  format(time) {
+    const pad = (time, length) => {
+      while (time.length < length) {
+        time = '0' + time;
+      }
+      return time;
+    };
+
+    time = new Date(time);
+    let m = pad(time.getMinutes().toString(), 2);
+    let s = pad(time.getSeconds().toString(), 2);
+    let ms = pad(time.getMilliseconds().toString(), 3);
+
+    return `${m}:${s}:${ms}`;
+  }
+
+
+  formatLap(time) {
+    const pad = (time, length) => {
+      while (time.length < length) {
+        time = '0' + time;
+      }
+      return time;
+    };
+
+    time = new Date(time);
+    let m = pad(time.getMinutes().toString(), 2);
+    let s = pad(time.getSeconds().toString(), 2);
+    let ms = pad(time.getMilliseconds().toString(), 3);
+
+    return `${m}:${s}:${ms}`;
   }
 
   render() {
-
-    var diff = this.state.diff;
-    var hundredths = diff ? Math.round(this.state.diff.getMilliseconds()/10) : 0;
-    var seconds = diff ? this.state.diff.getSeconds() : 0;
-    var minutes = diff ? this.state.diff.getMinutes() : 0;
-
-    if (hundredths === 100) hundredths = 0;
+    var lapsList = this.props.athlete.laps.map((lap, index) => {
+        return <GridTile style={{'font-size': '0.70em'}} key={uuidv4()}>{index+1 + ': ' + this.formatLap(lap)}</GridTile>;
+    });
 
     return (
-      <section className="Chrono">
-        <h1>{this.addZero(minutes)}:{this.addZero(seconds)}:{this.addZero(hundredths)}</h1>
-        <div className="buttons">
-          <button onClick={() => this.start()}>START</button>
-          <button onClick={() => this.stop()}>STOP</button>
-          <button onClick={() => this.reset()}>RESET</button>
-        </div>
-      </section>
+      <div>
+        <section className="Chrono">
+          <Chip style={styles.chip}>
+             <Avatar size={32}>{this.props.athlete.firstName.substring(0,1)}</Avatar>{this.props.athlete.firstName}
+          </Chip>
+          <ElapsedTime athlete={this.props.athlete}/>
+          <h1 style={{'background-color': this.props.athlete.program.countdown ? 'rgba(202, 51,86, .3)' : 'rgba(51, 178, 202, .3)'}}>{this.format(this.props.athlete.program.time)}</h1>
+          <span>{this.props.athlete.program.stepIndex}</span>
+          <div>
+            <FloatingActionButton mini={true} style={styles.button} onClick={() => {this.props.athlete.program.isOn ? this
+            .pause() : this.start();}}>
+              { this.props.athlete.program.isOn ? <Pause/> : <Play/>}
+             </FloatingActionButton>
+            <FloatingActionButton mini={true} style={styles.button} onClick={() => this.lap()}>
+                  <Reset/>
+             </FloatingActionButton>
+          </div>
+          <GridList cols={2} cellHeight={'auto'} padding={1}>
+              { lapsList }
+          </GridList>
+        </section>
+      </div>
     );
   }
 
 }
 
-export default connect(null, null)(Chrono);
+Chrono.propTypes = {
+  addAthleteLap: PropTypes.func,
+  athlete: PropTypes.object,
+  startTimer: PropTypes.func,
+  resetTimer: PropTypes.func,
+  tick: PropTypes.func,
+  showNotification: PropTypes.func,
+  programSteps: PropTypes.array,
+  tickStep: PropTypes.func,
+  nextStep: PropTypes.func,
+  startInterval: PropTypes.func,
+  pauseInterval: PropTypes.func,
+  stopTimer: PropTypes.func
+
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addAthleteLap: id => dispatch(addAthleteLap(id)),
+    resetTimer: id => dispatch(resetTimer(id)),
+    tick: (id,time) => dispatch(tick(id,time)),
+    showNotification: (message, duration) => dispatch(showNotification(message, duration)),
+    tickStep: (id,time) => dispatch(tickStep(id,time)),
+    nextStep: (id,stepIndex,countdown,time,offset) => dispatch(nextStep(id,stepIndex,countdown,time,offset)),
+    startInterval: (id, time, offset,stepIndex,countdown) => dispatch(startInterval(id, time, offset,stepIndex,countdown )),
+    startTimer: (id, offset) => dispatch(startTimer(id, offset )),
+    stopTimer: id => dispatch(stopTimer(id)),
+    pauseInterval: id => dispatch(pauseInterval(id))
+  };
+};
+
+const mapStateToProps = state => ({
+  programSteps: state.programSteps
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chrono);

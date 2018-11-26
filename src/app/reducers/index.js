@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux';
+import {athletes, groupFilter, programSteps, notification} from './chronoReducer';
 import {reducer as formReducer} from 'redux-form';
 
 const errorMessage = (state = null, action) => {
@@ -13,6 +14,10 @@ const errorMessage = (state = null, action) => {
 const rootReducer = combineReducers({
   errorMessage,
   routing: routerReducer,
+  athletes,
+  groupFilter,
+  programSteps,
+  notification,
   form: formReducer
 });
 
