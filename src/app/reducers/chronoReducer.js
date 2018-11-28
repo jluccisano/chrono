@@ -180,7 +180,7 @@ export const athletes = (state = [
       return updatedItems;
       }
     case ADD_ATHLETE_LAP: {
-    //state.push(array.splice(index, 1)[0]);
+    //updatedItems.push(updatedItems.splice(index, 1)[0]);
        const updatedItems = state.map(item => {
           if(item.id === action.id){
             return { ...item, laps: [...item.laps, item.program.time]};
