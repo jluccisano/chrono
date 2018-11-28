@@ -13,11 +13,11 @@ export class MainMenu extends Component {
 
   render() {
     return ( <Tabs>
-                <Tab label="Athletes">
+                <Tab label="Runners">
                   <AddAthlete/>
                   <AthleteTable/>
                 </Tab>
-                <Tab label="Program">
+                <Tab label="Intervals">
                   <Program/>
                 </Tab>
                 <Tab label="Chrono">

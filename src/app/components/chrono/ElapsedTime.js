@@ -9,6 +9,10 @@ class ElapsedTime extends React.Component {
 
   constructor(props) {
     super(props);
+
+    if(this.props.athlete.timer.isOn) {
+        this.progress();
+    }
   }
 
   componentWillUnmount() {
@@ -56,7 +60,7 @@ class ElapsedTime extends React.Component {
   render() {
     return (
       <div>
-        <h3 style={{'text-align': 'center'}}>{this.format(this.props.athlete.timer.time)}</h3>
+        <h3 style={{textAlign: 'center'}}>{this.format(this.props.athlete.timer.time)}</h3>
       </div>
     );
   }

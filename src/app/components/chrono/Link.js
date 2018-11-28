@@ -6,8 +6,7 @@ import {connect} from 'react-redux';
 
 const Link = ({name, filter, setFilter}) => {
   return (
-     <FlatButton label={name} primary={true} onClick={e => { e.preventDefault(); setFilter(filter); }}
-      />
+     <FlatButton style={{minWidth: '5px'}} label={name} primary={true} onClick={e => { e.preventDefault(); setFilter(filter); }}/>
   );
 };
 

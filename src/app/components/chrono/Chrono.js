@@ -3,7 +3,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import './_Chrono.scss';
-import {addAthleteLap, startTimer, stopTimer, resetTimer, tick, showNotification, tickStep, nextStep, startInterval, pauseInterval} from '../../actions/athleteActions';
+import * as AthleteActions from '../../actions/athleteActions';
 import PropTypes from 'prop-types';
 import uuidv4 from  'uuid/v4';
 import Chip from 'material-ui/Chip';
@@ -28,6 +28,10 @@ class Chrono extends React.Component {
 
   constructor(props) {
     super(props);
+
+    if(this.props.athlete.program.isOn) {
+         this.progressInterval();
+    }
   }
 
   componentWillUnmount() {
@@ -60,7 +64,7 @@ class Chrono extends React.Component {
              this.props.stopTimer(this.props.athlete.id);
              //notification
              this.pause();
-             this.props.showNotification('Finished ' + this.props.athlete.firstName  + ' !!!', 3000);
+             this.props.showNotification('Fini ' + this.props.athlete.firstName  + ' !!!', 3000);
         }
 
     } else {
@@ -72,7 +76,7 @@ class Chrono extends React.Component {
 	progressInterval = () => {
       // check if a rest step so stop and lap
       if(this.props.athlete.program.time <= 0 && this.props.athlete.program.countdown) {
-          this.props.showNotification('Go ' + this.props.athlete.firstName  + ' !!!', 3000);
+          this.props.showNotification('Allez ' + this.props.athlete.firstName  + ' !!!', 3000);
           cancelAnimationFrame(this._interval);
           this.nextInterval();
       } else {
@@ -105,6 +109,7 @@ class Chrono extends React.Component {
 	lap() {
      this.props.addAthleteLap(this.props.athlete.id);
      this.nextInterval();
+     this.props.updateOrder(this.props.athlete.id);
   }
 
   reset() {
@@ -128,9 +133,8 @@ class Chrono extends React.Component {
     time = new Date(time);
     let m = pad(time.getMinutes().toString(), 2);
     let s = pad(time.getSeconds().toString(), 2);
-    let ms = pad(time.getMilliseconds().toString(), 3);
 
-    return `${m}:${s}:${ms}`;
+    return `${m}:${s}`;
   }
 
 
@@ -162,7 +166,7 @@ class Chrono extends React.Component {
              <Avatar size={32}>{this.props.athlete.firstName.substring(0,1)}</Avatar>{this.props.athlete.firstName}
           </Chip>
           <ElapsedTime athlete={this.props.athlete}/>
-          <h1 style={{'background-color': this.props.athlete.program.countdown ? 'rgba(202, 51,86, .3)' : 'rgba(51, 178, 202, .3)'}}>{this.format(this.props.athlete.program.time)}</h1>
+          <h1 style={{backgroundColor: this.props.athlete.program.countdown ? 'rgba(202, 51,86, .3)' : 'rgba(51, 178,  202, .3)'}}>{this.format(this.props.athlete.program.time)}</h1>
           <span>{this.props.athlete.program.stepIndex}</span>
           <div>
             <FloatingActionButton mini={true} style={styles.button} onClick={() => {this.props.athlete.program.isOn ? this
@@ -195,22 +199,23 @@ Chrono.propTypes = {
   nextStep: PropTypes.func,
   startInterval: PropTypes.func,
   pauseInterval: PropTypes.func,
-  stopTimer: PropTypes.func
-
+  stopTimer: PropTypes.func,
+  updateOrder: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    addAthleteLap: id => dispatch(addAthleteLap(id)),
-    resetTimer: id => dispatch(resetTimer(id)),
-    tick: (id,time) => dispatch(tick(id,time)),
-    showNotification: (message, duration) => dispatch(showNotification(message, duration)),
-    tickStep: (id,time) => dispatch(tickStep(id,time)),
-    nextStep: (id,stepIndex,countdown,time,offset) => dispatch(nextStep(id,stepIndex,countdown,time,offset)),
-    startInterval: (id, time, offset,stepIndex,countdown) => dispatch(startInterval(id, time, offset,stepIndex,countdown )),
-    startTimer: (id, offset) => dispatch(startTimer(id, offset )),
-    stopTimer: id => dispatch(stopTimer(id)),
-    pauseInterval: id => dispatch(pauseInterval(id))
+    addAthleteLap: id => dispatch(AthleteActions.addAthleteLap(id)),
+    resetTimer: id => dispatch(AthleteActions.resetTimer(id)),
+    tick: (id,time) => dispatch(AthleteActions.tick(id,time)),
+    showNotification: (message, duration) => dispatch(AthleteActions.showNotification(message, duration)),
+    tickStep: (id,time) => dispatch(AthleteActions.tickStep(id,time)),
+    nextStep: (id,stepIndex,countdown,time,offset) => dispatch(AthleteActions.nextStep(id,stepIndex,countdown,time,offset)),
+    startInterval: (id, time, offset,stepIndex,countdown) => dispatch(AthleteActions.startInterval(id, time, offset,stepIndex,countdown )),
+    startTimer: (id, offset) => dispatch(AthleteActions.startTimer(id, offset )),
+    stopTimer: id => dispatch(AthleteActions.stopTimer(id)),
+    pauseInterval: id => dispatch(AthleteActions.pauseInterval(id)),
+    updateOrder: id => dispatch(AthleteActions.updateOrder(id))
   };
 };
 

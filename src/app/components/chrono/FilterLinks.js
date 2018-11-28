@@ -11,11 +11,12 @@ export class FilterLinks extends Component {
 
   render() {
     return (<div>
-         <Link name="All"     filter={GroupFilters.SHOW_ALL}/>
-         <Link name="Group 1" filter={GroupFilters.SHOW_GROUP1}/>
-         <Link name="Group 2" filter={GroupFilters.SHOW_GROUP2}/>
-         <Link name="Group 3" filter={GroupFilters.SHOW_GROUP3}/>
-         <Link name="Group 4" filter={GroupFilters.SHOW_GROUP4}/>
+         <Link name="Tous" filter={GroupFilters.SHOW_ALL}/>
+         <Link name="G1"  filter={GroupFilters.SHOW_GROUP1}/>
+         <Link name="G2"  filter={GroupFilters.SHOW_GROUP2}/>
+         <Link name="G3"  filter={GroupFilters.SHOW_GROUP3}/>
+         <Link name="G4"  filter={GroupFilters
+         .SHOW_GROUP4}/>
      </div>);
   }
 }

@@ -157,3 +157,9 @@ export const pauseInterval = (id) => ({
   type: 'PAUSE_INTERVAL',
   id
 });
+
+export const updateOrder = (id) => ({
+  type: 'UPDATE_ATHLETE_ORDER',
+  id
+});
+

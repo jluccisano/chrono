@@ -25,7 +25,8 @@ import {
   NEXT_STEP,
   TICK_STEP,
   START_INTERVAL,
-  PAUSE_INTERVAL
+  PAUSE_INTERVAL,
+  UPDATE_ATHLETE_ORDER
 } from '../constants/ActionTypes';
 import {GroupFilters, Notification} from '../actions/athleteActions';
 
@@ -86,7 +87,7 @@ export const programSteps = (state = [{id: '44732d8b-14e0-4c29-89a7-0adc1590c503
 export const athletes = (state = [
   {
      id: 0,
-     firstName: 'Nico',
+     firstName: 'Laurent gales',
      laps: [],
      group: 1,
      isPresent: true,
@@ -95,7 +96,7 @@ export const athletes = (state = [
    },
    {
       id: 1,
-      firstName: 'José',
+      firstName: 'Bellion anthony',
       laps: [],
       group: 1,
       isPresent: false,
@@ -104,7 +105,7 @@ export const athletes = (state = [
     },
     {
       id: 2,
-      firstName: 'Damien',
+      firstName: 'Dumas jerome',
       laps: [],
       group: 1,
       isPresent: false,
@@ -113,7 +114,7 @@ export const athletes = (state = [
     },
     {
       id: 3,
-      firstName: 'Mathieu',
+      firstName: 'J luc',
       laps: [],
       group: 1,
       isPresent: false,
@@ -122,7 +123,7 @@ export const athletes = (state = [
     },
     {
       id: 4,
-      firstName: 'Sylvain',
+      firstName: 'Stéphane',
       laps: [],
       group: 1,
       isPresent: false,
@@ -131,7 +132,7 @@ export const athletes = (state = [
     },
     {
       id: 5,
-      firstName: 'Thony',
+      firstName: 'Mahdi',
       laps: [],
       group: 1,
       isPresent: false,
@@ -140,13 +141,302 @@ export const athletes = (state = [
     },
     {
       id: 6,
-      firstName: 'Basile',
+      firstName: 'martinet seb',
       laps: [],
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
       program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
-    }], action) => {
+    },
+    {
+      id: 7,
+      firstName: 'taulu sebastien',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 8,
+      firstName: 'moreau bertrand',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 9,
+      firstName: 'Touly christophe',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 10,
+      firstName: 'Pourcel mathias',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 11,
+      firstName: 'Bellamy laurent',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 12,
+      firstName: 'Milla roger',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 13,
+      firstName: 'Agar adrienb',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 14,
+      firstName: 'grechez phillippe',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 15,
+      firstName: 'fortin olivier',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 16,
+      firstName: 'delcourt nicolas',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 17,
+      firstName: 'couture julien',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 18,
+      firstName: 'georget valentin',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 19,
+      firstName: 'Bellamy laurence',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 20,
+      firstName: 'Ropital christine',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 21,
+      firstName: 'Margaux crarié',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 22,
+      firstName: 'Tajanlyko sandrine',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 23,
+      firstName: 'gales géraldine',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 24,
+      firstName: 'laurent florianne',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 25,
+      firstName: 'Karinne perin',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 26,
+      firstName: 'Merchet alice',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 27,
+      firstName: 'Blanc julie',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 28,
+      firstName: 'Carbonnel cecile',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 29,
+      firstName: 'dubernard manon',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 30,
+      firstName: 'Milla clara',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 31,
+      firstName: 'Roy dorianne',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 32,
+      firstName: 'calmet laure',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 33,
+      firstName: 'Gemar peggy',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 34,
+      firstName: 'Marie pierre',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 35,
+      firstName: 'froidefond ines',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 36,
+      firstName: 'Marion',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 37,
+      firstName: 'Léa',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    },
+    {
+      id: 38,
+      firstName: 'Nathalie',
+      laps: [],
+      group: 1,
+      isPresent: false,
+      timer: {time: 0, isOn: false},
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+    }
+    ], action) => {
   switch (action.type) {
     case ADD_ATHELETE:
       return [
@@ -180,7 +470,6 @@ export const athletes = (state = [
       return updatedItems;
       }
     case ADD_ATHLETE_LAP: {
-    //updatedItems.push(updatedItems.splice(index, 1)[0]);
        const updatedItems = state.map(item => {
           if(item.id === action.id){
             return { ...item, laps: [...item.laps, item.program.time]};
@@ -189,6 +478,13 @@ export const athletes = (state = [
         });
       return updatedItems;
       }
+    case UPDATE_ATHLETE_ORDER: {
+        var index = state.findIndex(athlete => athlete.id==action.id);
+        var element = state[index];
+        state.splice(index, 1);
+        state.push(element);
+        return state;
+    }
     case SET_CHRONO_STATE:
       return state.map(item => {
           return { ...item, state: action.state };});

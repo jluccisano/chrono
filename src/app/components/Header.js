@@ -50,7 +50,7 @@ export class Header extends Component {
     return (<header>
       <PropDataUpdatedCSVLink ref={this.csvLink} data={this.state.data} filename={'my-file.csv'} style={{display:'none'}}
       target="_blank" ></PropDataUpdatedCSVLink>
-      <AppBar iconElementRight={<FlatButton label="Export" onClick={() => this.onClickCsv(this.props.athletes)}/>}/>
+      <AppBar iconElementRight={<FlatButton label="Exporter" onClick={() => this.onClickCsv(this.props.athletes)}/>}/>
     </header>);
   }
 }

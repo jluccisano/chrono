@@ -28,15 +28,15 @@ const Program = props => {
 
   return (
       <div>
-        <FloatingActionButton style={style}  onClick={() => addProgramStep()}>
+        <FloatingActionButton mini={true} style={style}  onClick={() => addProgramStep()}>
             <ContentAdd />
         </FloatingActionButton>
         <Table fixedHeader={false}>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
                 <TableHeaderColumn>Type</TableHeaderColumn>
-                <TableHeaderColumn>Duration (secs)</TableHeaderColumn>
-                <TableHeaderColumn>Delete</TableHeaderColumn>
+                <TableHeaderColumn>Durée (secs)</TableHeaderColumn>
+                <TableHeaderColumn>Supprimer</TableHeaderColumn>
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
@@ -48,20 +48,20 @@ const Program = props => {
                             floatingLabelText="type"
                             value={step.type || ''}
                             onChange={(e, key, value) => updateProgramStepType(step.id, value)}>
-                            <MenuItem value={1} primaryText="Run" />
-                            <MenuItem value={2} primaryText="Rest" />
+                            <MenuItem value={1} primaryText="Course" />
+                            <MenuItem value={2} primaryText="Récup" />
                           </SelectField>
                       </TableRowColumn>
                       <TableRowColumn style={{ width: '40%' }}>
                         <TextField
-                            label="Rest"
+                            label="Récup"
                             value={step.duration || 0}
                             onChange={(e, value) => updateProgramStepDuration(step.id, value)}
                             type="number"
                           />
                       </TableRowColumn>
                       <TableRowColumn style={{ width: '20%' }}>
-                          <FloatingActionButton style={style}  onClick={() => deleteProgramStep(step.id)}>
+                          <FloatingActionButton style={style} mini={true}  onClick={() => deleteProgramStep(step.id)}>
                                <ActionDelete />
                           </FloatingActionButton>
                       </TableRowColumn>

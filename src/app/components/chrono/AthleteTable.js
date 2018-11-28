@@ -26,31 +26,32 @@ return (
   <Table fixedHeader={true}>
     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
       <TableRow>
-        <TableHeaderColumn>Name</TableHeaderColumn>
-        <TableHeaderColumn>Group (1/2/3/4)</TableHeaderColumn>
-        <TableHeaderColumn>Present</TableHeaderColumn>
+        <TableHeaderColumn>Nom</TableHeaderColumn>
+        <TableHeaderColumn>Groupe (1/2/3/4)</TableHeaderColumn>
+        <TableHeaderColumn>Présent</TableHeaderColumn>
       </TableRow>
     </TableHeader>
     <TableBody displayRowCheckbox={false}>
       {athletes.map(athlete => (
        <TableRow key={athlete.id}>
-              <TableRowColumn style={{ width: '30%','padding-left': '4px', 'padding-right': '1px' }}>{athlete
+              <TableRowColumn style={{ width: '20%', paddingLeft: '4px', paddingRight: '1px' }}>{athlete
               .firstName}</TableRowColumn>
-              <TableRowColumn style={{ width: '40%','padding-left': '4px', 'padding-right': '1px'}}><RadioButtonGroup
+              <TableRowColumn style={{ width: '50%', paddingLeft: '4px', paddingRight: '1px'}}><RadioButtonGroup
               labelPosition="left"
                                                 name="status"
                                                 defaultSelected="1"
                                                 onChange={(e, value) => updateAthleteGroup(athlete.id,value)}>
-                              <RadioButton style={{ display: 'inline-block', width: '25px' }} label="" value="1"/>
-                              <RadioButton style={{ display: 'inline-block', width: '25px', marginLeft: '1px' }}
+                              <RadioButton style={{ display: 'inline-block', width: '35px' , marginLeft: '1px' }}
+                              label="" value="1"/>
+                              <RadioButton style={{ display: 'inline-block', width: '35px', marginLeft: '1px' }}
                               label="" value="2" />
-                              <RadioButton style={{ display: 'inline-block', width: '25px', marginLeft: '1px' }}
+                              <RadioButton style={{ display: 'inline-block', width: '35px', marginLeft: '1px' }}
                               label="" value="3" />
-                              <RadioButton style={{ display: 'inline-block', width: '25px', marginLeft: '1px' }}
+                              <RadioButton style={{ display: 'inline-block', width: '35px', marginLeft: '1px' }}
                               label="" value="4" />
                               </RadioButtonGroup>
               </TableRowColumn>
-              <TableRowColumn style={{ width: '30%', 'padding-left': '4px', 'padding-right': '1px'}}>
+              <TableRowColumn style={{ width: '30%', paddingLeft: '20px', paddingRight: '1px'}}>
                 <Toggle style={styles.toggle} onToggle={(e,isInputChecked) => updateAthletePresent(athlete.id,isInputChecked)}/>
               </TableRowColumn>
         </TableRow>
