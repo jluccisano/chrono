@@ -11,7 +11,6 @@ import {
   START_TIMER,
   STOP_TIMER,
   RESET_TIMER,
-  TICK,
   START_ALL_FILTER_TIMER,
   STOP_ALL_FILTER_TIMER,
   LAP_ALL_FILTER_TIMER,
@@ -23,10 +22,10 @@ import {
   SHOW_NOTIFICATION,
   HIDE_NOTIFICATION,
   NEXT_STEP,
-  TICK_STEP,
   START_INTERVAL,
   PAUSE_INTERVAL,
-  UPDATE_ATHLETE_ORDER
+  UPDATE_ATHLETE_ORDER,
+  SET_OFFSET
 } from '../constants/ActionTypes';
 import {GroupFilters, Notification} from '../actions/athleteActions';
 
@@ -90,9 +89,9 @@ export const athletes = (state = [
      firstName: 'Laurent gales',
      laps: [],
      group: 1,
-     isPresent: true,
+     isPresent: false,
      timer: {time: 0, isOn: false},
-     program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+     program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
    },
    {
       id: 1,
@@ -101,7 +100,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 2,
@@ -110,7 +109,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 3,
@@ -119,7 +118,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 4,
@@ -128,7 +127,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 5,
@@ -137,7 +136,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 6,
@@ -146,7 +145,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 7,
@@ -155,7 +154,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 8,
@@ -164,7 +163,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 9,
@@ -173,7 +172,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 10,
@@ -182,7 +181,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 11,
@@ -191,7 +190,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 12,
@@ -200,7 +199,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 13,
@@ -209,7 +208,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 14,
@@ -218,7 +217,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 15,
@@ -227,7 +226,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 16,
@@ -236,7 +235,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 17,
@@ -245,7 +244,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 18,
@@ -254,7 +253,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 19,
@@ -263,7 +262,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 20,
@@ -272,7 +271,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 21,
@@ -281,7 +280,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 22,
@@ -290,7 +289,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 23,
@@ -299,7 +298,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 24,
@@ -308,7 +307,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 25,
@@ -317,7 +316,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 26,
@@ -326,7 +325,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 27,
@@ -335,7 +334,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 28,
@@ -344,7 +343,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 29,
@@ -353,7 +352,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 30,
@@ -362,7 +361,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 31,
@@ -371,7 +370,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 32,
@@ -380,7 +379,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 33,
@@ -389,7 +388,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 34,
@@ -398,7 +397,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 35,
@@ -407,7 +406,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 36,
@@ -416,7 +415,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 37,
@@ -425,7 +424,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     },
     {
       id: 38,
@@ -434,7 +433,7 @@ export const athletes = (state = [
       group: 1,
       isPresent: false,
       timer: {time: 0, isOn: false},
-      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, offset: 0}
+      program: {stepIndex: 0, isOn: false, time: 0, countdown: false, startTS: 0, offset: 0}
     }
     ], action) => {
   switch (action.type) {
@@ -472,7 +471,7 @@ export const athletes = (state = [
     case ADD_ATHLETE_LAP: {
        const updatedItems = state.map(item => {
           if(item.id === action.id){
-            return { ...item, laps: [...item.laps, item.program.time]};
+            return { ...item, laps: [...item.laps, action.lap]};
           }
           return item;
         });
@@ -493,7 +492,7 @@ export const athletes = (state = [
       {
        const updatedItems = state.map(item => {
           if(item.id === action.id){
-            return { ...item, timer: { time: 0, isOn: true, offset: action.offset}};
+            return { ...item, timer: { time: 0, isOn: true, startTS: action.startTS}};
           }
           return item;
         });
@@ -505,7 +504,7 @@ export const athletes = (state = [
          const updatedItems = state.map(item => {
             if(item.id === action.id){
               return { ...item, program: { stepIndex: action.stepIndex, time: action.time, isOn: true, countdown: action
-              .countdown, offset: action.offset}};
+              .countdown, startTS: action.startTS}};
             }
             return item;
           });
@@ -518,9 +517,21 @@ export const athletes = (state = [
               return { ...item,
                       program: {  time: action.time,
                                   isOn: true,
-                                  offset: action.offset,
+                                  startTS: action.startTS,
                                   stepIndex: action.stepIndex,
                                   countdown: action.countdown}};
+            }
+            return item;
+          });
+        return updatedItems;
+        }
+      case SET_OFFSET:
+        {
+         const updatedItems = state.map(item => {
+            if(item.id === action.id){
+              return { ...item,
+                      program: {  ...item.program,
+                                  startTS: action.startTS}};
             }
             return item;
           });
@@ -530,7 +541,7 @@ export const athletes = (state = [
         {
          const updatedItems = state.map(item => {
             if(item.id === action.id){
-              return { ...item, program: {...item.program, isOn: false}};
+              return { ...item, program: {...item.program, isOn: false, offset: action.offset}};
             }
             return item;
           });
@@ -550,48 +561,48 @@ export const athletes = (state = [
      {
         const updatedItems = state.map(item => {
            if(item.id === action.id){
-             return { ...item, timer: { isOn: false, time: 0, offset: 0}};
+             return { ...item, timer: { isOn: false, time: 0, startTS: 0}};
            }
            return item;
          });
        return updatedItems;
      }
-    case TICK:
-      {
-       const updatedItems = state.map(item => {
-          if(item.id === action.id){
-            return { ...item, timer: { time: item.timer.time + (action.time - item.timer.offset), offset: action.time,
-            isOn: true}};
-          }
-          return item;
-        });
-      return updatedItems;
-      }
-    case TICK_STEP:
-      {
-       const updatedItems = state.map(item => {
-          if(item.id === action.id){
-            if(item.program.countdown) {
-              var newtime = item.program.time - (action.time - item.program.offset);
-              var isOn = true;
-              if(newtime < 0) {
-                newtime = 0;
-                isOn = false;
-              }
-              return { ...item, program: { ...item.program, time: newtime, offset: action.time,isOn: isOn}};
-            } else {
-              return { ...item, program: { ...item.program, time: item.program.time + (action.time - item.program.offset), offset: action.time,isOn: true}};
-            }
-          }
-          return item;
-        });
-      return updatedItems;
-      }
+//    case TICK:
+//      {
+//       const updatedItems = state.map(item => {
+//          if(item.id === action.id){
+//            return { ...item, timer: { time: item.timer.time + (action.time - item.timer.startTS), startTS: action.time,
+//            isOn: true}};
+//          }
+//          return item;
+//        });
+//      return updatedItems;
+//      }
+//    case TICK_STEP:
+//      {
+//       const updatedItems = state.map(item => {
+//          if(item.id === action.id){
+//            if(item.program.countdown) {
+//              var newtime = item.program.time - (action.time - item.program.startTS);
+//              var isOn = true;
+//              if(newtime < 0) {
+//                newtime = 0;
+//                isOn = false;
+//              }
+//              return { ...item, program: { ...item.program, time: newtime, startTS: action.time,isOn: isOn}};
+//            } else {
+//              return { ...item, program: { ...item.program, time: item.program.time + (action.time - item.program.startTS), startTS: action.time,isOn: true}};
+//            }
+//          }
+//          return item;
+//        });
+//      return updatedItems;
+//      }
     case START_ALL_FILTER_TIMER: {
        debugger;
        const updatedItems = state.map(item => {
           if(item.id === action.id && (item.group && item.group == action.group)){
-            return { ...item, timer: { time: 0, isOn: true, offset: action.offset}};
+            return { ...item, timer: { time: 0, isOn: true, startTS: action.startTS}};
           }
           return item;
         });
@@ -600,7 +611,7 @@ export const athletes = (state = [
     case STOP_ALL_FILTER_TIMER: {
        const updatedItems = state.map(item => {
           if(item.id === action.id && (item.group && item.group == action.group)){
-             return { ...item, timer: { isOn: false, time: 0, offset: 0}};
+             return { ...item, timer: { isOn: false, time: 0, startTS: 0}};
           }
           return item;
         });
@@ -618,7 +629,7 @@ export const athletes = (state = [
     case RESET_ALL_FILTER_TIMER: {
        const updatedItems = state.map(item => {
           if(item.id === action.id && (item.group && item.group == action.group)){
-             return { ...item, timer: { isOn: false, time: 0, offset: 0}};
+             return { ...item, timer: { isOn: false, time: 0, startTS: 0}};
           }
           return item;
         });

@@ -13,7 +13,7 @@ import Play from 'material-ui/svg-icons/av/play-arrow';
 import Pause from 'material-ui/svg-icons/av/pause';
 import Reset from 'material-ui/svg-icons/av/replay';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ElapsedTime from './ElapsedTime';
+//import ElapsedTime from './ElapsedTime';
 
 const styles = {
   chip: {
@@ -28,19 +28,26 @@ class Chrono extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = this.getInitialState();
+  }
 
-    if(this.props.athlete.program.isOn) {
-         this.progressInterval();
-    }
+  componentDidMount() {
+    this.resume();
   }
 
   componentWillUnmount() {
 		if (this._interval) cancelAnimationFrame(this._interval);
 	}
 
-	nextInterval() {
-    var currentTime = Date.now();
-    //this._interval = requestAnimationFrame(this.progressStep);
+  getInitialState() {
+      return {
+        startTS: 0,
+        diff: 0,
+        suspended: 0,
+      };
+  }
+
+	nextInterval(currentTime) {
 
     var nextIndex = this.props.athlete.program.stepIndex + 1;
 
@@ -50,11 +57,16 @@ class Chrono extends React.Component {
           var nextStep =  this.props.programSteps[nextIndex-1];
           if(nextStep.type == 2) {
              var expireAt = nextStep.duration * 1000; //sec to milliseconds
-             this._interval = requestAnimationFrame(this.progressInterval);
-             this.props.startInterval(this.props.athlete.id, expireAt, currentTime, nextIndex, true);
+             this.props.startInterval(this.props.athlete.id, 0 , currentTime + expireAt, nextIndex, true);
+             this.setState({
+                 startTS: currentTime + expireAt
+             });
           } else {
-             this._interval = requestAnimationFrame(this.progressInterval);
              this.props.startInterval(this.props.athlete.id, 0, currentTime, nextIndex, false);
+             this.setState({
+                startTS: currentTime,
+                suspended: 0
+             });
           }
 
         } else {
@@ -68,57 +80,97 @@ class Chrono extends React.Component {
         }
 
     } else {
-            this._interval = requestAnimationFrame(this.progressInterval);
-            this.props.startInterval(this.props.athlete.id,0, currentTime, nextIndex);
+         this.props.startInterval(this.props.athlete.id,0, currentTime, nextIndex);
+              this.setState({
+                startTS: currentTime,
+                suspended: 0
+              });
     }
 	}
 
-	progressInterval = () => {
-      // check if a rest step so stop and lap
-      if(this.props.athlete.program.time <= 0 && this.props.athlete.program.countdown) {
-          this.props.showNotification('Allez ' + this.props.athlete.firstName  + ' !!!', 3000);
-          cancelAnimationFrame(this._interval);
-          this.nextInterval();
-      } else {
-          this.props.tickStep(this.props.athlete.id,  Date.now());
-          this._interval = requestAnimationFrame(this.progressInterval);
-      }
-	}
+	tick = () => {
+    if(this.props.athlete.program.countdown) {
+        if(this.state.diff <= 0) {
+            this.props.showNotification('Allez ' + this.props.athlete.firstName  + ' !!!', 3000);
+            this.setState(this.getInitialState());
+            this.nextInterval(Date.now());
+        }
+        this.setState({
+           diff: new Date((this.state.startTS - Date.now()))
+        });
+    } else {
+        this.setState({
+           diff: new Date(Date.now() - this.state.startTS)
+        });
+    }
 
-  start() {
-     var currentTime =  Date.now();
-     if(!this.props.athlete.timer.isOn) {
-        this.props.startTimer(this.props.athlete.id, currentTime);
-        this.nextInterval();
-     } else {
-        this.resume(currentTime);
-     }
+    this._interval = requestAnimationFrame(this.tick);
   }
 
-  resume(currentTime) {
-      this._interval = requestAnimationFrame(this.progressInterval);
-      this.props.startInterval(this.props.athlete.id, this.props.athlete.program.time, currentTime, this.props.athlete.program.stepIndex);
+  start() {
+     var currentTime = Date.now() - this.state.suspended;
+//     this.setState({
+//           startTS: currentTime,
+//           suspended: 0
+//     });
+
+     //this.props.startTimer(this.props.athlete.id);
+
+     if(!this.props.athlete.timer.isOn) {
+        this.nextInterval(currentTime);
+     }
+
+     //this.props.startInterval(this.props.athlete.id,0, currentTime, 0);
+
+     this._interval = requestAnimationFrame(this.tick);
+  }
+
+  resume() {
+      this.setState({
+        startTS: this.props.athlete.program.startTS + (+this.props.athlete.program.offset),
+        diff: Date.now() - (+new Date() - this.props.athlete.program.offset)
+      });
+      if(this.props.athlete.program.isOn) {
+        this._interval = requestAnimationFrame(this.tick);
+      }
   }
 
 	pause() {
     cancelAnimationFrame(this._interval);
-    this.props.pauseInterval(this.props.athlete.id);
+    this.setState({
+       suspended: +this.state.diff
+    });
+    this.props.pauseInterval(this.props.athlete.id, this.state.diff);
+    this.setState({
+        startTS: 0,
+        suspended: +this.state.diff
+    });
   }
 
 
 	lap() {
-     this.props.addAthleteLap(this.props.athlete.id);
-     this.nextInterval();
+     var currentTime = Date.now();
+     this.props.addAthleteLap(this.props.athlete.id, this.formatLap(this.state.diff));
+     this.nextInterval(currentTime);
      this.props.updateOrder(this.props.athlete.id);
   }
 
   reset() {
-    cancelAnimationFrame(this._interval);
-    this.props.resetTimer(this.props.athlete.id);
+    //cancelAnimationFrame(this._interval);
+
+    cancelAnimationFrame(this.state.interval);
+    this.setState(this.getInitialState());
+
+    //this.props.resetTimer(this.props.athlete.id);
   }
 
   stop() {
-      cancelAnimationFrame(this._interval);
+      //cancelAnimationFrame(this._interval);
+      cancelAnimationFrame(this.state.interval);
+      this.setState({
+        startTS: null,
+        suspended: +this.state.diff
+      });
   }
 
 
@@ -133,8 +185,10 @@ class Chrono extends React.Component {
     time = new Date(time);
     let m = pad(time.getMinutes().toString(), 2);
     let s = pad(time.getSeconds().toString(), 2);
+    let cs = pad(Math.round(time.getMilliseconds()/10, 2));
 
-    return `${m}:${s}`;
+
+    return `${m}:${s}:${cs}`;
   }
 
 
@@ -156,17 +210,16 @@ class Chrono extends React.Component {
 
   render() {
     var lapsList = this.props.athlete.laps.map((lap, index) => {
-        return <GridTile style={{'font-size': '0.70em'}} key={uuidv4()}>{index+1 + ': ' + this.formatLap(lap)}</GridTile>;
+        return <GridTile style={{'fontSize': '0.70em'}} key={uuidv4()}>{index+1 + ': ' + lap}</GridTile>;
     });
-
+//          <ElapsedTime athlete={this.props.athlete}/>
     return (
       <div>
         <section className="Chrono">
           <Chip style={styles.chip}>
              <Avatar size={32}>{this.props.athlete.firstName.substring(0,1)}</Avatar>{this.props.athlete.firstName}
           </Chip>
-          <ElapsedTime athlete={this.props.athlete}/>
-          <h1 style={{backgroundColor: this.props.athlete.program.countdown ? 'rgba(202, 51,86, .3)' : 'rgba(51, 178,  202, .3)'}}>{this.format(this.props.athlete.program.time)}</h1>
+          <h1 style={{backgroundColor: this.props.athlete.program.countdown ? 'rgba(202, 51,86, .3)' : 'rgba(51, 178, 202, .3)'}}>{this.format(this.state.diff)}</h1>
           <span>{this.props.athlete.program.stepIndex}</span>
           <div>
             <FloatingActionButton mini={true} style={styles.button} onClick={() => {this.props.athlete.program.isOn ? this
@@ -192,30 +245,28 @@ Chrono.propTypes = {
   athlete: PropTypes.object,
   startTimer: PropTypes.func,
   resetTimer: PropTypes.func,
-  tick: PropTypes.func,
   showNotification: PropTypes.func,
   programSteps: PropTypes.array,
-  tickStep: PropTypes.func,
   nextStep: PropTypes.func,
   startInterval: PropTypes.func,
   pauseInterval: PropTypes.func,
   stopTimer: PropTypes.func,
-  updateOrder: PropTypes.func
+  updateOrder: PropTypes.func,
+  setOffset: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    addAthleteLap: id => dispatch(AthleteActions.addAthleteLap(id)),
+    addAthleteLap: (id,lap) => dispatch(AthleteActions.addAthleteLap(id, lap)),
     resetTimer: id => dispatch(AthleteActions.resetTimer(id)),
-    tick: (id,time) => dispatch(AthleteActions.tick(id,time)),
     showNotification: (message, duration) => dispatch(AthleteActions.showNotification(message, duration)),
-    tickStep: (id,time) => dispatch(AthleteActions.tickStep(id,time)),
     nextStep: (id,stepIndex,countdown,time,offset) => dispatch(AthleteActions.nextStep(id,stepIndex,countdown,time,offset)),
-    startInterval: (id, time, offset,stepIndex,countdown) => dispatch(AthleteActions.startInterval(id, time, offset,stepIndex,countdown )),
+    startInterval: (id, time, startTS,stepIndex,countdown) => dispatch(AthleteActions.startInterval(id, time, startTS,stepIndex,countdown )),
     startTimer: (id, offset) => dispatch(AthleteActions.startTimer(id, offset )),
     stopTimer: id => dispatch(AthleteActions.stopTimer(id)),
-    pauseInterval: id => dispatch(AthleteActions.pauseInterval(id)),
-    updateOrder: id => dispatch(AthleteActions.updateOrder(id))
+    pauseInterval: (id,offset) => dispatch(AthleteActions.pauseInterval(id, offset)),
+    updateOrder: id => dispatch(AthleteActions.updateOrder(id)),
+    setOffset: (id, offset) => dispatch(AthleteActions.setOffset(id, offset))
   };
 };
 

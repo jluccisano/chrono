@@ -3,7 +3,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import './_Chrono.scss';
-import {GridList} from 'material-ui/GridList';
 import Chrono from './Chrono';
 import FilterLinks from './FilterLinks';
 import ControlLinks from './ControlLinks';
@@ -11,6 +10,8 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import {GroupFilters} from '../../actions/athleteActions';
 import Notification from './Notification';
+import {List, ListItem} from 'material-ui/List';
+
 
 const showGroup = (athletes, filter) => {
   switch (filter) {
@@ -37,14 +38,13 @@ class Serie extends React.Component {
   }
 
   render() {
-    const athleteItems = _.map(this.props.athletes, athlete => <Chrono key={athlete.id} athlete={athlete}/>);
+    const athleteItems = _.map(this.props.athletes, athlete => <ListItem key={athlete.id}><Chrono
+    athlete={athlete}/></ListItem>);
     return (
       <div>
         <FilterLinks/>
         <ControlLinks/>
-        <GridList cols={2} cellHeight={'auto'} padding={1}>
-          {athleteItems}
-        </GridList>
+        <List>{athleteItems}</List>
         <Notification/>
       </div>);
 

@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import {CSVLink} from 'react-csv';
 import _ from 'underscore';
 import FlatButton from 'material-ui/FlatButton';
+import saveAs from 'file-saver';
 
 class PropDataUpdatedCSVLink extends CSVLink {
 	constructor(props) {
@@ -44,6 +45,15 @@ export class Header extends Component {
     this.setState({data: athletesToCsv}, () => {
         this.csvLink.current.link.click();
     });
+    var content = 'Whats up , hello world';
+    // any kind of extension (.txt,.cpp,.cs,.bat)
+    var filename = 'hello.txt';
+
+    var blob = new Blob([content], {
+     type: 'text/plain;charset=utf-8'
+    });
+
+    saveAs(blob, filename);
   }
 
   render() {

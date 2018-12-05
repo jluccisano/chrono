@@ -50,12 +50,6 @@ export const startTimer = (id, offset) => ({
   offset
 });
 
-export const tick = (id, time) => ({
-  type: 'TICK',
-  id,
-  time
-});
-
 export const stopTimer = (id) => ({
   type: 'STOP_TIMER',
   id
@@ -125,14 +119,6 @@ export const hideNotification = () => ({
   type: 'HIDE_NOTIFICATION'
 });
 
-
-export const tickStep = (id, time) => ({
-  type: 'TICK_STEP',
-  id,
-  time
-});
-
-
 export const nextStep = (id,stepIndex,countdown,time,offset) => ({
   type: 'NEXT_STEP',
   id,
@@ -144,22 +130,29 @@ export const nextStep = (id,stepIndex,countdown,time,offset) => ({
 
 
 
-export const startInterval = (id,time,offset,stepIndex,countdown) => ({
+export const startInterval = (id,time,startTS,stepIndex,countdown) => ({
   type: 'START_INTERVAL',
   id,
   time,
-  offset,
+  startTS,
   stepIndex,
   countdown
 });
 
-export const pauseInterval = (id) => ({
+export const pauseInterval = (id, offset) => ({
   type: 'PAUSE_INTERVAL',
-  id
+  id,
+  offset
 });
 
 export const updateOrder = (id) => ({
   type: 'UPDATE_ATHLETE_ORDER',
   id
+});
+
+export const setOffset = (id, offset) => ({
+  type: 'SET_OFFSET',
+  id,
+  offset
 });
 

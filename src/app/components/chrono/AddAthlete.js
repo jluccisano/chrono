@@ -16,8 +16,8 @@ const renderTextField = ({
   ...custom
 }) => (
   <TextField
+    id="12345"
     hintText={label}
-    id="1"
     floatingLabelText={label}
     errorText={touched && error}
     {...input}
@@ -34,6 +34,7 @@ const AddAthlete = props => {
       <form onSubmit={handleSubmit(submit)}>
         <div style={{ display: 'inline-block' }}>
           <Field
+            id="12345"
             name="firstName"
             component={renderTextField}
             label="Nom"
